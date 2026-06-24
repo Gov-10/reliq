@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+python-dotenv
+requests
+networkx
+sqlalchemy
+redis
+psycopg2-binary
+prometheus-client
+opentelemetry-sdk
+opentelemetry-api
+opentelemetry-exporter-otlp
+opentelemetry-instrumentation-fastapi
+opentelemetry-instrumentation-sqlalchemy
+grpcio
+opentelemetry-proto

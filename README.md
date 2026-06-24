@@ -12,4 +12,7 @@ An air-gapped operational intelligence stack that forecasts service degradation,
 4. Backend services: FastAPI
 5. Local SLM: phi-3.5-mini
 6. Queue system: Kafka
+## Status
+1. Successful testing of the custom OTLP receiver done
+2. Next task: Construction of State Dependency graph using the metrics and data received through receiver
 

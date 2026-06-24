@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: network-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: topology
+  template:
+    metadata:
+      labels:
+        app: topology
+    spec:
+      containers:
+        - name: topology
+          image: docker.io/gov10/reliq-test:6.0
+          ports:
+            - containerPort: 7000
+            - containerPort: 4317
+
