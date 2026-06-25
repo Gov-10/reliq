@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Depends, Response
-from utils.graph import sdg
+from utils.graph import sdg, graph_data, bl_radius, critic_score
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
@@ -50,4 +50,12 @@ def test_trace():
 
 @app.get("/graph")
 def get_graph():
-    return {"nodes": list(sdg.nodes()), "edges": [{"source": u, "target": v, **attrs} for u,v, attrs in sdg.edges(data=True)]}
+    return graph_data()
+
+@app.get("/blradius/{service_name}")
+def blrad(service_name:str):
+    return bl_radius(service_name)
+
+@app.get("/critical/{service_name}")
+def criti(service_name: str):
+    return critic_score(service_name)
