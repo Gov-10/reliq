@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Depends, Response
+from utils.graph import sdg
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
@@ -46,3 +47,7 @@ def metrics():
 def test_trace():
     with tracer.start_as_current_span("topology-test"):
         return {"status": "trace generated"}
+
+@app.get("/graph")
+def get_graph():
+    return {"nodes": list(sdg.nodes()), "edges": [{"source": u, "target": v, **attrs} for u,v, attrs in sdg.edges(data=True)]}
