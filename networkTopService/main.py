@@ -1,5 +1,8 @@
 from fastapi import FastAPI, HTTPException, Request, Depends, Response
 from utils.graph import sdg, graph_data, bl_radius, critic_score
+from utils.database import sessionLocal, Graph
+from utils.tasks import save_func
+from utils.schedule import sche
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
@@ -15,6 +18,13 @@ import os, json, logging
 from dotenv import load_dotenv
 from redis import Redis
 load_dotenv()
+def get_db():
+    db=sessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 #redis_client=Redis(host=os.getenv("REDIS_HOST"), port=int(os.getenv("REDIS_PORT")), password=os.getenv("REDIS_PASSWORD"), decode_responses=True)
 app=FastAPI()
 resource = Resource.create({"service.name": "network-service"})
@@ -38,6 +48,7 @@ def receiver_status():
 @app.on_event("startup")
 def startup():
     server.start()
+    sche(save_func)
 
 @app.get("/metrics")
 def metrics():
@@ -59,3 +70,8 @@ def blrad(service_name:str):
 @app.get("/critical/{service_name}")
 def criti(service_name: str):
     return critic_score(service_name)
+
+@app.get("/snapshots")
+def get_snap(db:Session=Depends(get_db)):
+    snaps= db.query(Graph).order_by(Graph.created_at.desc()).limit(20).all()
+    return snaps
