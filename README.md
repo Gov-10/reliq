@@ -13,7 +13,6 @@ An air-gapped operational intelligence stack that forecasts service degradation,
 5. Local SLM: phi-3.5-mini
 6. Queue system: Kafka
 ## Status
-1. state dependency graph construction done
-2. Impact scope and criticality score calculation done
-3. Next task: Storing snapshots of the generated graph in PostgreSQL database
+1. storing snapshots in PostgreSQL database done
+2. Next task: Creating a test microservice product for testing and custom dataset creation for ML model
 
